@@ -1,28 +1,38 @@
 import React from "react";
-import '../styles/Cart.css';
-const Cart = () => {
-	const flowers = [
-		{ name: "Toy Machine", price: 60 },
-		{ name: "Almost", price: 70 },
-		{ name: "Antihero", price: 55 },
-	];
+import "../styles/Cart.css";
+import { useState } from "react";
 
-	const totalPrice = flowers.reduce(
-		(total, flower) => total + flower.price,
-		0
-	);
+const Cart = ({cart, updateCart}) => {
 
-	return (
-		<div className="cart-container">
-			<h2 className="cart-title">Panier</h2>
-			<ul className="cart-list">
-				{flowers.map((flower, index) => (
-					<li key={index} className="cart-item">
-						{flower.name} : {flower.price}€
-					</li>
-				))}
-			</ul>
-			<p className="cart-total">Total : {totalPrice}€</p>
+	const [isOpen, setIsOpen] = useState(false);
+
+	return isOpen ? (
+		<>
+			<div className="cart-container">
+				<div className="cart-closed">
+					<button onClick={() => setIsOpen(false)}>
+						Fermer le panier
+					</button>
+				</div>
+				<h2 className="cart-title">Panier</h2>
+				<ul className="cart-list">
+				{Object.entries(cart.reduce((acc, skate) => {
+					acc[skate.name] = acc[skate.name] || { ...skate, quantity: 0 };
+					acc[skate.name].quantity += 1;
+					return acc;
+				}, {})).map(([name, skate]) => (
+					<li key={name}>{name} - {skate.price}€ x {skate.quantity}</li>
+				))}	
+				</ul>
+				<p className="cart-total">Total : {cart.reduce((acc, skate) => acc + skate.price, 0)}€</p>
+				<button onClick={() => updateCart([])}>
+					Vider le panier
+				</button>
+			</div>
+		</>
+	) : (
+		<div className="cart-closed">
+			<button onClick={() => setIsOpen(true)}>Ouvrir le panier</button>
 		</div>
 	);
 };
