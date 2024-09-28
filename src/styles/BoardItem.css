@@ -47,3 +47,11 @@
     transition: transform 0.1s ease;
     transform: scale(1.15);
 }
+
+.add-to-cart {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    width: 2rem;
+    height: 2rem;
+}
